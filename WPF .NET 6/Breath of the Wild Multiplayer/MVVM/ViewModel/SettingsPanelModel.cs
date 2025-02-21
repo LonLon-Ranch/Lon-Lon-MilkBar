@@ -14,8 +14,10 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 {
     public class SettingsPanelModel : ObservableObject
     {
-        private bool _enableCustomModels;
+       
 
+        private bool _enableCustomModels;
+        public static string VersionInText => $"{MainWindow.VERSION}";
         public bool EnableCustomModels
         {
             get { return _enableCustomModels; }
@@ -39,7 +41,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
             }
             
         }
-
+        
         private bool _RPCDisplayServer;
 
         public bool RPCDisplayServer

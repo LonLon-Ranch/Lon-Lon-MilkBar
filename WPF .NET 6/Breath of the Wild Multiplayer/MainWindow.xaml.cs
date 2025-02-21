@@ -30,10 +30,12 @@ namespace Breath_of_the_Wild_Multiplayer
 
     public partial class MainWindow : Window
     {
+        
+        public static string VERSION = "2.2"; // the version number of the launcher
 
         public void HideTextVersion()
         {
-            VersionText.Visibility = Visibility.Collapsed; // hide the version text
+            //VersionText.Visibility = Visibility.Collapsed; // hide the version text
         }
 
         public MainWindow()
