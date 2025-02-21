@@ -384,7 +384,8 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.Model
                     "Zelda",
                     "Ganondorf",
                     "Impa",
-                    "Kass"
+                    "Kass",
+                    "optimusslime333"
                 };
 
             this.questGiver = QuestGivers[random.Next(QuestGivers.Count)];
