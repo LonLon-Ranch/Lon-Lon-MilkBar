@@ -17,29 +17,8 @@
             <ColumnDefinition Width="70"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.Column="1" Fill="#CC1C1C1C" Margin="0,-0.175,0,-0.3"/>
 
-        <Path Stroke="#55FFFFFF" StrokeThickness="2" Panel.ZIndex="1">
-            <Path.Data>
-                <GeometryGroup>
-                    <LineGeometry StartPoint="0,1" EndPoint="1105,1"/>
-                    <LineGeometry StartPoint="1105,1" EndPoint="1115,12"/>
-                    <LineGeometry StartPoint="1115,12" EndPoint="1115,486"/>
-                    <LineGeometry StartPoint="1115,486" EndPoint="1105,496"/>
-                    <LineGeometry StartPoint="0,496" EndPoint="1105,496"/>
-                </GeometryGroup>
-            </Path.Data>
-        </Path>
-
-        <Polygon Fill="#55FFFFFF" Points="0 0,5 0,5 5" Panel.ZIndex="1" HorizontalAlignment="Right"/>
-        <Polygon Fill="#55FFFFFF" Points="0 0,5 0,5 5" Panel.ZIndex="1" HorizontalAlignment="Right" Margin="0,5,0,0"/>
-        <Polygon Fill="#55FFFFFF" Points="0 0,5 0,5 5" Panel.ZIndex="1" HorizontalAlignment="Right" Margin="0,0,5,0"/>
-
-        <Polygon Fill="#55FFFFFF" Points="0 5,5 0,5 5" Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-        <Polygon Fill="#55FFFFFF" Points="0 5,5 0,5 5" Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,0"/>
-        <Polygon Fill="#55FFFFFF" Points="0 5,5 0,5 5" Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
-
-        <Grid>
+        <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.65*"/>
                 <ColumnDefinition Width="0.35*"/>

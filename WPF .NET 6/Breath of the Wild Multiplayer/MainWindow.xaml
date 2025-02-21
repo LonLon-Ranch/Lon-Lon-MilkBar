@@ -54,15 +54,6 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Label Content="V2.1 By the Lon Lon Ranch" 
-               x:Name="VersionText"
-               Visibility="Visible"
-               HorizontalAlignment="Left" 
-               VerticalAlignment="Bottom"
-               FontFamily="Roboto"
-               FontSize="35"
-               FontStyle="Normal"
-               Foreground="White" Margin="760,0,0,0" Grid.Row="1"/>
 
             <Label Content="{Binding appTitle}" 
                Grid.Row="2" 

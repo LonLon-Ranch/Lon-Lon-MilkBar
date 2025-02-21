@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +25,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.View
     /// </summary>
     public partial class SettingsPanelView : UserControl
     {
+        public string VersionInText => $"V{MainWindow.VERSION}";
         public SettingsPanelView()
         {
             InitializeComponent();
@@ -35,7 +37,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.View
                     Assets = new Assets()
                     {
                         LargeImageKey = "image_big",
-                        LargeImageText = "V2.1 By the lon lon ranch",
+                        LargeImageText = "V"+MainWindow.VERSION +" By the Lon Lon Ranch",
                         //SmallImageKey = "little_image",
                         //SmallImageText = "Text little_image",
                     }

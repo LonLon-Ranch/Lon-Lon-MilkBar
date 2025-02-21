@@ -99,11 +99,11 @@
 
             <DataTrigger Binding="{Binding viewPosition}" Value="1">
                 <DataTrigger.Setters>
-                    <Setter Property="Margin" Value="70,0,0,0"/>
+                    <Setter Property="Margin" Value="0,0,0,0"/>
                 </DataTrigger.Setters>
             </DataTrigger>
             <DataTrigger Binding="{Binding viewPosition}" Value="2">
-                <Setter Property="Margin" Value="0,0,70,0"/>
+                <Setter Property="Margin" Value="0,0,0,0"/>
             </DataTrigger>
 
         </Style.Triggers>
