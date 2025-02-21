@@ -31,17 +31,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.View
             InitializeComponent();
             if (DiscordRichPresence.client != null)
             {
-                DiscordRichPresence.client.SetPresence(new RichPresence()
-                {
-                    Details = "Settings",
-                    Assets = new Assets()
-                    {
-                        LargeImageKey = "image_big",
-                        LargeImageText = "V"+MainWindow.VERSION +" By the Lon Lon Ranch",
-                        //SmallImageKey = "little_image",
-                        //SmallImageText = "Text little_image",
-                    }
-                });
+                DiscordRichPresence.updateRPC("Model Selection", "");
             }
         }
 
