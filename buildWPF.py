@@ -96,10 +96,11 @@ if(os.path.exists(Output)):
 BuildProject(GUIAppProject)
 if not sys.platform == "linux":
     BuildProject(WPFProject)
-    BuildDLL()
+
     os.mkdir(f"{Output}/BNPs")
 
     FixPublish()
+    BuildDLL()
 
     for file in os.listdir(f"{os.getcwd()}/BNP Files"):
         if not ".bnp" in file: continue
