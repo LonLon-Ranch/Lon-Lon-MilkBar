@@ -17,6 +17,7 @@ namespace BOTWM.Server.DTO
             DeathSwapData = new DeathSwapDTO();
             TeleportData = new TeleportDTO();
             PropHuntData = new PropHuntDTO();
+            pvp = true;
         }
 
         public WorldDTO WorldData;
@@ -30,5 +31,6 @@ namespace BOTWM.Server.DTO
         public DeathSwapDTO DeathSwapData;
         public TeleportDTO TeleportData;
         public PropHuntDTO PropHuntData;
+        public bool pvp;
     }
 }

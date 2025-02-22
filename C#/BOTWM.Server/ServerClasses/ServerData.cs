@@ -41,6 +41,7 @@ namespace BOTWM.Server.ServerClasses
         public static DeathSwapSettings DeathSwap;
         public static Teleport TeleportData;
         public static PropHunt PropHuntData;
+        public static bool pvp;
         public static ServerConfiguration Configuration;
         static List<List<bool>> Updated = new List<List<bool>>();
         static List<DeathSwapDTO> DeathSwapQueue = new List<DeathSwapDTO>();
@@ -79,6 +80,8 @@ namespace BOTWM.Server.ServerClasses
             DeathSwap = new DeathSwapSettings();
             TeleportData = new Teleport(PLAYERLIMIT);
             PropHuntData = new PropHunt();
+
+            pvp = true;
         }
 
         #region Update
