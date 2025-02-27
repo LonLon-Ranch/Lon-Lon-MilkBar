@@ -1,6 +1,6 @@
 # Lon Lon MilkBar
 
-## Lon Lon MilkBar is JUST a fork of the original Milkbar Launcher project by the MilkBar Studios team.
+## Lon Lon MilkBar is a fork of the original MilkBar Launcher project by the MilkBar Studios team. We DID NOT make the bulk of the mod, we just added features and made improvements.
 
 You can find the changelog in this trello board: https://trello.com/b/VzEeQhBW/lon-lon-milkbar
 
