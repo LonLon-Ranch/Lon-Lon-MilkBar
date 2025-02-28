@@ -27,20 +27,60 @@ namespace Breath_of_the_Wild_Multiplayer
             client.Initialize();
         }
 
-        public static void updateRPC(string Details, string State)
+        private static DateTime? startTime;
+
+        public static void updateRPC(bool InGame, string Details, string State, int Current, int Max)
         {
-            client.SetPresence(new RichPresence()
+            if (startTime == null)
             {
-                Details = Details,
-                State = State,
-                Assets = new Assets()
+                startTime = DateTime.UtcNow;
+            }
+
+            if (InGame)
+            {
+                client.SetPresence(new RichPresence()
                 {
-                    LargeImageKey = "image_big",
-                    LargeImageText = $"V{MainWindow.VERSION} by The Lon Lon Ranch",
-                    //SmallImageKey = "little_image",
-                    //SmallImageText = "Text little_image",
-                }
-            });
+                    Details = Details,
+                    State = State,
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = "image_big",
+                        LargeImageText = $"V{MainWindow.VERSION} by The Lon Lon Ranch",
+                        //SmallImageKey = "little_image",
+                        //SmallImageText = "Text little_image",
+                    },
+
+                    Party = new Party()
+                    {
+                        ID = "party_id",
+                        Size = Current,
+                        Max = Max,
+                    },
+                    Timestamps = new Timestamps()
+                    {
+                        Start = startTime
+                    }
+                });
+            }
+            else
+            {
+                client.SetPresence(new RichPresence()
+                {
+                    Details = Details,
+                    State = State,
+                    Assets = new Assets()
+                    {
+                        LargeImageKey = "image_big",
+                        LargeImageText = $"V{MainWindow.VERSION} by The Lon Lon Ranch",
+                        //SmallImageKey = "little_image",
+                        //SmallImageText = "Text little_image",
+                    },
+                    Timestamps = new Timestamps()
+                    {
+                        Start = startTime
+                    }
+                });
+            }
         }
     }
 
