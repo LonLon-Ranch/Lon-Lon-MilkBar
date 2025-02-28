@@ -384,7 +384,14 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.Model
                     "Zelda",
                     "Ganondorf",
                     "Impa",
-                    "Kass"
+                    "Kass",
+                    "King Rhoam Bosphoramus Hyrule",
+                    "Wesley Da Man",
+                    "JoLiLol",
+                    "Umm12many",
+                    "Sooly",
+                    "MADMAN-Modding",
+                    "The Lon Lon Ranch Dev Team"
                 };
 
             this.questGiver = QuestGivers[random.Next(QuestGivers.Count)];

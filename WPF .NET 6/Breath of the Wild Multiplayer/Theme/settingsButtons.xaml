@@ -371,7 +371,7 @@
                     <Border Background="Transparent">
                         <StackPanel>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" Height="50" Source="{TemplateBinding Tag}">
+                            <Image HorizontalAlignment="Center" VerticalAlignment="Center" Width="70px" Height="70px" Source="{TemplateBinding Tag}">
                                 <Image.Effect>
                                     <DropShadowEffect ShadowDepth="0"
                                                       Color="Transparent"

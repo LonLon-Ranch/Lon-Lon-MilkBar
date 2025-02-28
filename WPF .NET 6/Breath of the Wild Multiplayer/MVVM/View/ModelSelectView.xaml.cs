@@ -30,17 +30,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.View
             dataContext.UpdateBodyImage();
             if (DiscordRichPresence.client != null)
             {
-                DiscordRichPresence.client.SetPresence(new RichPresence()
-                {
-                    Details = "Model Selection",
-                    Assets = new Assets()
-                    {
-                        LargeImageKey = "image_big",
-                        LargeImageText = "V2.1 By the lon lon ranch",
-                        //SmallImageKey = "little_image",
-                        //SmallImageText = "Text little_image",
-                    }
-                });
+                DiscordRichPresence.updateRPC("Model Selection", "");
             }
         }
 

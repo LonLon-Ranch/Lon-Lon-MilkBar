@@ -191,33 +191,11 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
                     {
                         if (DisplayServer)
                         {
-                            DiscordRichPresence.client.SetPresence(new RichPresence()
-                            {
-                                Details = $"Playing in {server.Name}, Gamemode: {server.playStyle}",
-                                State = $"Players connected: {NumberOfPlayers}/{server.capacity}",
-                                Assets = new Assets()
-                                {
-                                    LargeImageKey = "image_big",
-                                    LargeImageText = "V2.1 By the lon lon ranch",
-                                    //SmallImageKey = "little_image",
-                                    //SmallImageText = "Text little_image",
-                                }
-                            });
+                            DiscordRichPresence.updateRPC($"Playing in {server.Name}, Gamemode: {server.playStyle}", $"Players connected: {NumberOfPlayers}/{server.capacity}");
                         }
                         else
                         {
-                            DiscordRichPresence.client.SetPresence(new RichPresence()
-                            {
-                                Details = $"Gamemode: {server.playStyle}",
-                                State = $"Players connected: {NumberOfPlayers}/{server.capacity}",
-                                Assets = new Assets()
-                                {
-                                    LargeImageKey = "image_big",
-                                    LargeImageText = "V2.1 By the lon lon ranch",
-                                    //SmallImageKey = "little_image",
-                                    //SmallImageText = "Text little_image",
-                                }
-                            });
+                            DiscordRichPresence.updateRPC($"Gamemode: {server.playStyle}", $"Players connected: {NumberOfPlayers}/{server.capacity}");
                         }
                     }
                     Thread.Sleep(10000);

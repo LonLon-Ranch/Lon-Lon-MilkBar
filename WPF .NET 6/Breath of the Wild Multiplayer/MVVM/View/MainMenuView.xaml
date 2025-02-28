@@ -7,7 +7,7 @@
              xmlns:viewModel="clr-namespace:Breath_of_the_Wild_Multiplayer.MVVM.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <UserControl.DataContext>
         <viewModel:MainMenuModel/>
     </UserControl.DataContext>
@@ -45,10 +45,9 @@
         <ContentPresenter Content="{Binding currentTopView}"/>
     </Border>-->
 
-        <Rectangle Grid.Row="1" Fill="#66414141" Style="{StaticResource backgroundMargin}"/>
+        <Rectangle Grid.Row="1" Fill="#66414141" Style="{StaticResource backgroundMargin}" Grid.RowSpan="2"/>
 
         <Border Background="#CC1C1C1C" Grid.Row="0"/>
-        <Border Background="#CC1C1C1C" Grid.Row="2" CornerRadius="0, 0, 5, 5"/>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Width="120" Command="{Binding moveLeft}">
@@ -141,6 +140,6 @@
         </StackPanel>
 
         <ContentControl Grid.Row="1"
-            Content="{Binding currentView}" Style="{StaticResource contentControlAnimations}"/>
+            Content="{Binding currentView}" Style="{StaticResource contentControlAnimations}" Grid.RowSpan="2"/>
     </Grid>
 </UserControl>

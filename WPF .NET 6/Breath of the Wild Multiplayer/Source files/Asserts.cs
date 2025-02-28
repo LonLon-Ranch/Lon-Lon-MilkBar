@@ -29,14 +29,14 @@ namespace Breath_of_the_Wild_Multiplayer
             if (!File.Exists($"{Local}/bcml/settings.json"))
             {
                 var errorpopup = new Error();
-                Error.ShowErrorPopup("BCML is not installed, or the data directory is modified.");
+                Error.ShowErrorPopup("BCML is not installed, or the data directory is modified. TIP: The BNP files need to be installed on the same drive that your python installation is in (Most likely the C: Drive)");
                 Environment.Exit(0);
 
             }
 
             if (!Directory.Exists($"{bcmlPath}/Model"))
             {
-                Error.ShowErrorPopup("The mods are not correctly installed in bcml");
+                Error.ShowErrorPopup("The mods are not correctly installed in bcml. TIP: The BNP files need to be installed on the same drive that your python installation is in (Most likely the C: Drive)");
                 Environment.Exit(0);
             }
 

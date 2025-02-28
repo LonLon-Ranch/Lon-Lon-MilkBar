@@ -22,36 +22,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Fill="#CC1C1C1C" Margin="0,-0.175,0,-0.3"/>
+        <Rectangle Fill="#CC1C1C1C" Margin="-258,-108,258,108"/>
 
-        <Path Stroke="#55FFFFFF" Grid.Column="1" Grid.ColumnSpan="2" StrokeThickness="2" Panel.ZIndex="1">
-            <Path.Data>
-                <GeometryGroup>
-                    <LineGeometry StartPoint="12,1" EndPoint="2000,1"/>
-                    <LineGeometry StartPoint="12,1" EndPoint="1,12"/>
-                    <LineGeometry StartPoint="1,12" EndPoint="1,486"/>
-                    <LineGeometry StartPoint="1,486" EndPoint="12,496"/>
-                    <LineGeometry StartPoint="12,496" EndPoint="2000,496"/>
-                </GeometryGroup>
-            </Path.Data>
-        </Path>
-
-        <Polygon Fill="#55FFFFFF" Points="0 0,5 0,0 5" Grid.Column="1" Panel.ZIndex="1"/>
-        <Polygon Fill="#55FFFFFF" Points="0 0,5 0,0 5" Grid.Column="1" Panel.ZIndex="1" Margin="5,0,0,0"/>
-        <Polygon Fill="#55FFFFFF" Points="0 0,5 0,0 5" Grid.Column="1" Panel.ZIndex="1" Margin="0,5,0,0"/>
-
-        <Polygon Fill="#55FFFFFF" Points="0 0,0 5,5 5" Grid.Column="1" Panel.ZIndex="1" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
-        <Polygon Fill="#55FFFFFF" Points="0 0,0 5,5 5" Grid.Column="1" Panel.ZIndex="1" VerticalAlignment="Bottom" Margin="5,0,0,0"/>
-        <Polygon Fill="#55FFFFFF" Points="0 0,0 5,5 5" Grid.Column="1" Panel.ZIndex="1" VerticalAlignment="Bottom"/>
-
-        <Grid Grid.Column="1">
+        <Grid Grid.ColumnSpan="2" Margin="-5,0,0,189">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.10*"/>
             </Grid.RowDefinitions>
 
             <Image Source="{StaticResource White_Logo}"
-                   Margin="5,-132,5,142">
+                   Margin="32,0,32,85">
                 <Image.Effect>
                     <DropShadowEffect ShadowDepth="0"
                                   Color="Black"
@@ -77,20 +57,19 @@
                 Style="{StaticResource modifiableTextBox}" 
                 TextChanged="TextBox_TextChanged" 
                 BorderBrush="#FFC4C6CB" 
-                MaxLength="18">
+                MaxLength="18" Margin="0,-1,0,21">
                 <TextBox.Tag>
                     <sys:String>Player Name</sys:String>
                 </TextBox.Tag>
             </TextBox>
 
             <customControls:optionsLabel 
-                Grid.Row="1" 
                 Content="{Binding Source={x:Static properties:Settings.Default}, Path=background}" 
                 Style="{StaticResource optionsCustomLabel}" 
                 leftButton="{Binding backgroundLeftButton}" 
                 rightButton="{Binding backgroundRightButton}" 
                 movingLeft="{Binding backgroundMovingLeft}" 
-                movingRight="{Binding backgroundMovingRight}">
+                movingRight="{Binding backgroundMovingRight}" Margin="0,69,0,51" Grid.RowSpan="2">
 
                 <Label.Tag>
                     <sys:String>Background</sys:String>
@@ -100,9 +79,9 @@
 
             <Button 
                 Content="Select settings.json" 
-                Grid.Row="2" 
+                Grid.Row="1" 
                 Command="{Binding bcmlButton}" 
-                Style="{StaticResource customButton}">
+                Style="{StaticResource customButton}" Margin="0,40,0,80" Grid.RowSpan="2">
                 <Button.Tag>
                     <sys:String>Launch settings</sys:String>
                 </Button.Tag>
@@ -117,22 +96,22 @@
 
             <Button 
                 Content="Restore" 
-                Grid.Row="3" 
+                Grid.Row="2" 
                 Command="{Binding restartSettings}" 
-                Style="{StaticResource customButton}">
+                Style="{StaticResource customButton}" Margin="0,11,0,2">
 
                 <Button.Tag>
                     <sys:String>Default settings</sys:String>
                 </Button.Tag>
             </Button>
 
-            <Button Content="Milkbar Studios" Style="{StaticResource DiscordButtons}" Command="{Binding discordButton}" Margin="-495,5,450,0" Grid.Row="2" Width="150px">
+            <Button Content="Milkbar Studios" Style="{StaticResource DiscordButtons}" Command="{Binding discordButton}" Margin="-417,26,497,4" Grid.Row="3"  Height="150" Width="150" Grid.RowSpan="2">
                 <Button.Tag>
                     <BitmapImage UriSource="/Images/milkbar_Logo.png"/>
                 </Button.Tag>
             </Button>
 
-            <Button Content="Lon Lon Ranch" Style="{StaticResource DiscordButtons}" Command="{Binding ForkdiscordButton}" Margin="-628,5,620,0" Grid.Row="2" Width="150px">
+            <Button Content="Lon Lon Ranch" Style="{StaticResource DiscordButtons}" Command="{Binding ForkdiscordButton}" Margin="-572,26,652,4" Grid.Row="3" Height="150px" Width="150px" Grid.RowSpan="2">
                 <Button.Tag>
                     <BitmapImage UriSource="/Images/lonlon_Logo.png"/>
                 </Button.Tag>
@@ -140,9 +119,9 @@
 
             <CheckBox
                 Content="Play as model"
-                Grid.Row="4"
+                Grid.Row="2"
                 Style="{StaticResource customCheckbox}"
-                IsChecked="{Binding EnableCustomModels}">
+                IsChecked="{Binding EnableCustomModels}" Margin="0,88,0,40" Grid.RowSpan="2">
 
                 <CheckBox.ToolTip>
                     <ToolTip
@@ -156,7 +135,7 @@
                Content="Discord Presence"
                Grid.Row="4"
                Style="{StaticResource discordCustomCheckbox}"
-               IsChecked="{Binding EnableDiscordRPC}" Margin="-495,0,605,0">
+               IsChecked="{Binding EnableDiscordRPC}" Margin="0,15,0,0">
                 <CheckBox.ToolTip>
                     <ToolTip
                         Content="Restarts the application to apply changes"
@@ -168,10 +147,12 @@
                Content="Show server name in discord RPC"
                Grid.Row="3"
                Style="{StaticResource discordServerCustomCheckbox}"
-               IsChecked="{Binding RPCDisplayServer}" Margin="-495,0,605,0">
+               IsChecked="{Binding RPCDisplayServer}" Margin="0,50,0,75" Grid.RowSpan="2">
             </CheckBox>
 
         </Grid>
+        <Label Content="Lon Lon Launcher &amp; Dedicated Server Build Version:" HorizontalAlignment="Left" Margin="26,212,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Roboto" FontSize="22" Grid.ColumnSpan="2"/>
+        <Label x:Name="VersionNum" Content="{Binding VersionInText}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontFamily="Roboto" Margin="195,248,0,0" Grid.Column="1" FontSize="20" Width="36" Height="28" RenderTransformOrigin="0.5,0.243"/>
 
     </Grid>
 </UserControl>
