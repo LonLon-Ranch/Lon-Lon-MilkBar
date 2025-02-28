@@ -1425,6 +1425,16 @@ namespace BOTW.DedicatedServer
             }
         }
 
+        [ServerCommand]
+        [Description("Toggles PVP")]
+        [ExtraHelp("Usage: PVP")]
+        [AlternateName("PlayerVersusPlayer")]
+        public void PVP()
+        {
+            ServerData.pvp = !ServerData.pvp;
+            Logger.LogInformation($"PVP {(ServerData.pvp ? "Enabled" : "Disabled")}!");
+        }
+
         private bool GetProphuntState(string state)
         {
             if (state == "" || (state != "start" && state != "stop" && state != "on" && state != "off"))

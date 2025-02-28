@@ -4,6 +4,8 @@
 
 You can find the changelog in this trello board: https://trello.com/b/VzEeQhBW/lon-lon-milkbar
 
+The beta here means this *MIGHT have some features that dont fully work or are still in testing but have random errors
+
 **There are four important folders in this project listed below:**
 
 ## [C#](C%23)
