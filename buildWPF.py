@@ -96,7 +96,6 @@ if(os.path.exists(Output)):
 BuildProject(GUIAppProject)
 if not sys.platform == "linux":
     BuildProject(WPFProject)
-
     os.mkdir(f"{Output}/BNPs")
 
     FixPublish()
