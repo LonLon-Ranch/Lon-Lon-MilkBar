@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
 
             <Image Source="{StaticResource White_Logo}"
-                   Margin="32,0,32,85">
+                   Margin="32,-21,32,106">
                 <Image.Effect>
                     <DropShadowEffect ShadowDepth="0"
                                   Color="Black"
@@ -105,13 +105,13 @@
                 </Button.Tag>
             </Button>
 
-            <Button Content="Milkbar Studios" Style="{StaticResource DiscordButtons}" Command="{Binding discordButton}" Margin="-417,26,497,4" Grid.Row="3"  Height="150" Width="150" Grid.RowSpan="2">
+            <Button Content="Milkbar Studios" Style="{StaticResource DiscordButtons}" Command="{Binding discordButton}" Margin="-520,26,497,4" Grid.Row="3"  Height="150" Width="150" Grid.RowSpan="2">
                 <Button.Tag>
                     <BitmapImage UriSource="/Images/milkbar_Logo.png"/>
                 </Button.Tag>
             </Button>
 
-            <Button Content="Lon Lon Ranch" Style="{StaticResource DiscordButtons}" Command="{Binding ForkdiscordButton}" Margin="-572,26,652,4" Grid.Row="3" Height="150px" Width="150px" Grid.RowSpan="2">
+            <Button Content="Lon Lon Ranch" Style="{StaticResource DiscordButtons}" Command="{Binding ForkdiscordButton}" Margin="-682,26,652,4" Grid.Row="3" Height="150px" Width="150px" Grid.RowSpan="2">
                 <Button.Tag>
                     <BitmapImage UriSource="/Images/lonlon_Logo.png"/>
                 </Button.Tag>
@@ -151,8 +151,8 @@
             </CheckBox>
 
         </Grid>
-        <Label Content="Lon Lon Launcher &amp; Dedicated Server Build Version:" HorizontalAlignment="Left" Margin="26,212,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Roboto" FontSize="22" Grid.ColumnSpan="2"/>
-        <Label x:Name="VersionNum" Content="{Binding VersionInText}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontFamily="Roboto" Margin="195,248,0,0" Grid.Column="1" FontSize="20" Width="36" Height="28" RenderTransformOrigin="0.5,0.243"/>
+        <Label Content="Lon Lon Launcher &amp; Dedicated Server Build Version:" HorizontalAlignment="Left" Margin="26,216,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Roboto" FontSize="22" Grid.ColumnSpan="2"/>
+        <Label x:Name="VersionNum" Content="{Binding VersionInText}" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontFamily="Roboto" Margin="195,252,0,0" Grid.Column="1" FontSize="20" Width="36" Height="28" RenderTransformOrigin="0.5,0.243"/>
 
     </Grid>
 </UserControl>
