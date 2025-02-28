@@ -191,11 +191,11 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
                     {
                         if (DisplayServer)
                         {
-                            DiscordRichPresence.updateRPC($"Playing in {server.Name}, Gamemode: {server.playStyle}", $"Players connected: {NumberOfPlayers}/{server.capacity}");
+                            DiscordRichPresence.updateRPC(true, $"Gamemode: {server.playStyle}", $"Playing in {server.Name}" , NumberOfPlayers, server.capacity);
                         }
                         else
                         {
-                            DiscordRichPresence.updateRPC($"Gamemode: {server.playStyle}", $"Players connected: {NumberOfPlayers}/{server.capacity}");
+                            DiscordRichPresence.updateRPC(true, $"Gamemode: {server.playStyle}", $"Playing" , NumberOfPlayers, server.capacity);
                         }
                     }
                     Thread.Sleep(10000);
