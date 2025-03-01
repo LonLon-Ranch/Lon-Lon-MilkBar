@@ -31,6 +31,7 @@ namespace BOTWM.Server.ServerClasses
         static Dictionary<string, string> ArmorMappings;
         static bool IsEnemySync;
         static bool IsQuestSync;
+        static bool AlwaysDay;
 
         public static World WorldData;
         public static Names NameData;
@@ -73,6 +74,7 @@ namespace BOTWM.Server.ServerClasses
 
             IsEnemySync = settings.EnemySync;
             IsQuestSync = settings.QuestSyncSettings.AnyTrue;
+            AlwaysDay = false;
 
             ArmorMappings = ReadArmorMappingJson();
 
