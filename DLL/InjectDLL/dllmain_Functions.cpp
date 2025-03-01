@@ -1692,12 +1692,23 @@ void Main::mainServerLoop()
             CalculatePVPDamage();
         }
 
+
         if (!Helper::Vec3f_Operations::Equals(serverResponse->TeleportData->Destination, Vec3f(0, 0, 0)))
             Game::GameInstance->Teleport(serverResponse->TeleportData->Destination);
 
         // TODO: Add set for world dto
         if (!Game::GameInstance->IsGamePaused && Game::GameInstance->Location->LastKnown.Map != "CDungeon")
-            Game::GameInstance->World->set(serverResponse->WorldData);
+        {
+            if (serverResponse->NetworkData->AlwaysDay)
+            {
+                Game::GameInstance->World->setAlwaysDay(180.000000);
+            }
+            else
+            {
+                Game::GameInstance->World->set(serverResponse->WorldData);
+            }
+        }
+            
 
         // Death swap
 

@@ -33,6 +33,19 @@ namespace MemoryAccess
 			Mutex.unlock();
 		}
 
+		void setAlwaysDay(float time)
+                {
+                    Mutex.lock();
+
+                    int currentDay = this->Day->get(__FUNCTION__);
+                    float currentTime = this->ReadableTime->get(__FUNCTION__);
+
+                    this->WritableTime->set(time, __FUNCTION__);
+                    Sleep(100);
+
+                    Mutex.unlock();
+                }
+
 		DTO::WorldDTO* get()
 		{
 			Mutex.lock();

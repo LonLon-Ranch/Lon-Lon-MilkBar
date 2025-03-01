@@ -16,6 +16,7 @@ namespace DTO
 		short GlyphTime;
 		bool isQuestSync;
 		bool isEnemySync;
+        bool AlwaysDay;
 	};
 
 }
