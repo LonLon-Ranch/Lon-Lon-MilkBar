@@ -18,5 +18,6 @@ namespace BOTWM.Server.DTO
         public short GlyphTime;
         public bool isQuestSync;
         public bool isEnemySync;
+        public bool AlwaysDay;
     }
 }
