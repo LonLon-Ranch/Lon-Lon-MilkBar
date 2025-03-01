@@ -14,7 +14,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.View
             InitializeComponent();
             if (DiscordRichPresence.client != null)
             {
-                DiscordRichPresence.updateRPC("Lobby Browser", "");
+                DiscordRichPresence.updateRPC(false, "Lobby Browser", "", 0, 0);
             }
         }
 

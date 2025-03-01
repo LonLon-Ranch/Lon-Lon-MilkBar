@@ -65,6 +65,7 @@ namespace Main
 	extern bool isEnemySync;
 	extern bool isGlyphSync;
 	extern bool isQuestSync;
+    extern bool AlwaysDay;
 	extern bool isHvsSR;
 	extern bool isDeathSwap;
 

@@ -1000,6 +1000,18 @@ namespace BOTW.DedicatedServer
 
         //}
 
+
+        [ServerCommand]
+        [Description("set always day")]
+
+        public void AlwaysDay()
+        {
+            server.AlwaysDay = !server.AlwaysDay;
+            Logger.LogInformation(!server.AlwaysDay ? "Deactivated AlwaysDay" : "Activated AlwaysDay", color: commandColors);
+        }
+
+
+
         [ServerCommand]
         [Description("Get or set time")]
         [ExtraHelp("Usage: Time Get or Time Set <value>")]

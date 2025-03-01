@@ -1,4 +1,4 @@
-# Lon Lon MilkBar
+# Lon Lon MilkBar - BETA branch
 
 ## Lon Lon MilkBar is a fork of the original MilkBar Launcher project by the MilkBar Studios team. We DID NOT make the bulk of the mod, we just added features and made improvements.
 

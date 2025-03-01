@@ -63,6 +63,7 @@ DWORD Main::t1 = GetTickCount();
 std::string Main::serverData = "";
 
 bool Main::isEnemySync = false;
+bool Main::AlwaysDay = false;
 bool Main::isGlyphSync = false;
 bool Main::isQuestSync = false;
 bool Main::isHvsSR = false;

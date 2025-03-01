@@ -403,6 +403,8 @@ DTO::NetworkDTO* Serializer::DeserializeNetworkData(std::vector<byte> input)
     copyData(&result->GlyphTime, &input[0] + currentIndex, 2);
     copyData(&result->isQuestSync, &input[0] + currentIndex, 1);
     copyData(&result->isEnemySync, &input[0] + currentIndex, 1);
+    copyData(&result->AlwaysDay, &input[0] + currentIndex, 1);
+    
 
     return result;
 }
