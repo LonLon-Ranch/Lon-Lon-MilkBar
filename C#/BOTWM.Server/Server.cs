@@ -28,6 +28,7 @@ namespace BOTWM.Server
         public short GlyphTime = 60;
         public bool isQuestSync = false;
         public bool isEnemySync = false;
+        public bool AlwaysDay = false;
         public string Gamemode = "";
 
         public bool EnemyLog { get; set; }
