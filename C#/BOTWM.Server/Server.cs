@@ -29,6 +29,7 @@ namespace BOTWM.Server
         public bool isQuestSync = false;
         public bool isEnemySync = false;
         public bool AlwaysDay = false;
+        public bool pvp = true;
         public string Gamemode = "";
 
         public bool EnemyLog { get; set; }
