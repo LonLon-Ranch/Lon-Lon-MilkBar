@@ -38,7 +38,6 @@ DTO::ServerDTO* Serializer::DeserializeServerData(byte* inputBytes)
     result->DeathSwapData = DeserializeDeathSwapData(input);
     result->TeleportData = DeserializeTeleportData(input);
     result->PropHuntData = DeserializePropHuntData(input);
-    result->pvp = DeserializePVPData(input);
 
     return result;
 }
@@ -404,6 +403,7 @@ DTO::NetworkDTO* Serializer::DeserializeNetworkData(std::vector<byte> input)
     copyData(&result->isQuestSync, &input[0] + currentIndex, 1);
     copyData(&result->isEnemySync, &input[0] + currentIndex, 1);
     copyData(&result->AlwaysDay, &input[0] + currentIndex, 1);
+    copyData(&result->pvp, &input[0] + currentIndex, 1);
     
 
     return result;
@@ -434,14 +434,6 @@ DTO::PropHuntDTO* Serializer::DeserializePropHuntData(std::vector<byte> input)
     copyData(&result->Phase, &input[0] + currentIndex, 1);
     copyData(&result->StartingPosition, &input[0] + currentIndex, 12);
     copyData(&result->IsHunter, &input[0] + currentIndex, 1);
-
-    return result;
-}
-
-bool* Serializer::DeserializePVPData(std::vector<byte> input)
-{
-    bool* result = new bool();
-    copyData(&result, &input[0] + currentIndex, 1);
 
     return result;
 }

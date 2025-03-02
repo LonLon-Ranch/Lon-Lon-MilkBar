@@ -1687,11 +1687,11 @@ void Main::mainServerLoop()
             ping += timeToSleep;
         }
 
-        if (serverResponse->pvp)
+        if (serverResponse->NetworkData->pvp)
         {
             CalculatePVPDamage();
         }
-
+        
 
         if (!Helper::Vec3f_Operations::Equals(serverResponse->TeleportData->Destination, Vec3f(0, 0, 0)))
             Game::GameInstance->Teleport(serverResponse->TeleportData->Destination);
