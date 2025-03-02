@@ -32,6 +32,7 @@ namespace BOTWM.Server.ServerClasses
         static bool IsEnemySync;
         static bool IsQuestSync;
         static bool AlwaysDay;
+        static bool pvp;
 
         public static World WorldData;
         public static Names NameData;
@@ -42,7 +43,6 @@ namespace BOTWM.Server.ServerClasses
         public static DeathSwapSettings DeathSwap;
         public static Teleport TeleportData;
         public static PropHunt PropHuntData;
-        public static bool pvp;
         public static ServerConfiguration Configuration;
         static List<List<bool>> Updated = new List<List<bool>>();
         static List<DeathSwapDTO> DeathSwapQueue = new List<DeathSwapDTO>();
@@ -75,6 +75,7 @@ namespace BOTWM.Server.ServerClasses
             IsEnemySync = settings.EnemySync;
             IsQuestSync = settings.QuestSyncSettings.AnyTrue;
             AlwaysDay = false;
+            pvp = true;
 
             ArmorMappings = ReadArmorMappingJson();
 
@@ -82,8 +83,6 @@ namespace BOTWM.Server.ServerClasses
             DeathSwap = new DeathSwapSettings();
             TeleportData = new Teleport(PLAYERLIMIT);
             PropHuntData = new PropHunt();
-
-            pvp = true;
         }
 
         #region Update

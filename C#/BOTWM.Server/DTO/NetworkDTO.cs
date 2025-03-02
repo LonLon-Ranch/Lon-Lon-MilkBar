@@ -19,5 +19,6 @@ namespace BOTWM.Server.DTO
         public bool isQuestSync;
         public bool isEnemySync;
         public bool AlwaysDay;
+        public bool pvp;
     }
 }

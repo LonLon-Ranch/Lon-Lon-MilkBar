@@ -17,6 +17,7 @@ namespace DTO
 		bool isQuestSync;
 		bool isEnemySync;
         bool AlwaysDay;
+        bool pvp;
 	};
 
 }
