@@ -37,7 +37,6 @@ static class Serializer
     static DTO::DeathSwapDTO* DeserializeDeathSwapData(std::vector<byte> input);
     static DTO::TeleportDTO* DeserializeTeleportData(std::vector<byte> input);
     static DTO::PropHuntDTO* DeserializePropHuntData(std::vector<byte> input);
-    static bool* DeserializePVPData(std::vector<byte> input);
     static DataTypes::ModelData* DeserializeModelData(std::vector<byte> input);
     static DataTypes::BumiiData* DeserializeBumiiData(std::vector<byte> input);
 

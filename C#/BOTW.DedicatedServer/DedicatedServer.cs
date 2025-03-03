@@ -1002,14 +1002,22 @@ namespace BOTW.DedicatedServer
 
 
         [ServerCommand]
-        [Description("set always day")]
+        [Description("Set Always Day")]
 
         public void AlwaysDay()
         {
             server.AlwaysDay = !server.AlwaysDay;
-            Logger.LogInformation(!server.AlwaysDay ? "Deactivated AlwaysDay" : "Activated AlwaysDay", color: commandColors);
+            Logger.LogInformation(!server.AlwaysDay ? "Deactivated AlwaysDay" : "Activated AlwaysDay, THIS FEATURE MAY INCREASE LATENCY", color: commandColors);
         }
 
+        [ServerCommand]
+        [Description("Enable or Disable pvp")]
+
+        public void pvp()
+        {
+            server.pvp = !server.pvp;
+            Logger.LogInformation(!server.pvp ? "Deactivated pvp" : "Activated pvp", color: commandColors);
+        }
 
 
         [ServerCommand]
