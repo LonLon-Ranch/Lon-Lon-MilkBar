@@ -61,32 +61,36 @@
             // Ensure the Logs folder exists
             if (!Directory.Exists(LogsFolder))
                 Directory.CreateDirectory(LogsFolder);
-
-            string creationTime = DateTime.Now.ToString("yyyy-MM-dd, HH-mm-ss");
-            string newLogPath = $"{LogsFolder}\\{creationTime}.txt";
-
-            // Check if the log file already exists in the Logs folder
-            if (File.Exists(newLogPath))
-            {
-                File.Delete(newLogPath);
-            }
-
-            // If the LatestLog.txt exists, move it to the Logs folder with a timestamp
+        
+            // Move the existing LatestLog.txt to the Logs folder with a timestamp
             if (File.Exists(LogPath))
             {
                 string previousLogTime = File.GetCreationTime(LogPath).ToString("yyyy-MM-dd, HH-mm-ss");
                 string previousLogPath = $"{LogsFolder}\\{previousLogTime}.txt";
-
+        
                 if (File.Exists(previousLogPath))
                     File.Delete(previousLogPath);
-
+        
                 File.Move(LogPath, previousLogPath);
             }
-
-            // Create a new log file
-            using (File.CreateText(LogPath))
+        
+            // Always create a new log file for the current session
+            string creationTime = DateTime.Now.ToString("yyyy-MM-dd, HH-mm-ss");
+            string newLogPath = $"{LogsFolder}\\{creationTime}.txt";
+            using (File.CreateText(newLogPath)) { }
+        
+            // Point LatestLog.txt to the new log file
+            LogPath = newLogPath;
+        
+            // Get all log files and keep only the 5 most recent ones
+            var logFiles = Directory.GetFiles(LogsFolder, "*.txt")
+                                    .OrderByDescending(f => File.GetCreationTime(f))
+                                    .ToList();
+        
+            while (logFiles.Count > 10)
             {
-                // Initial placeholder or write any necessary headers (optional)
+                File.Delete(logFiles.Last());
+                logFiles.RemoveAt(logFiles.Count - 1);
             }
         }
 
