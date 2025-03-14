@@ -276,6 +276,9 @@ namespace BOTWM.Server.ServerClasses
 
         #region HelperMethods
 
+        public static bool IsIPBanned = false; // controlled in server.cs
+        public static bool IsNameBanned = false; // controlled in server.cs
+
         static public ConnectResponseDTO TryAssigning(ConnectDTO UserConfiguration)
         {
             if (Configuration.PASSWORD != "" && Configuration.PASSWORD != UserConfiguration.Password)
@@ -300,6 +303,23 @@ namespace BOTWM.Server.ServerClasses
                 }
             }
             // Yay not taken
+
+            if (IsIPBanned)
+            {
+                // GET OUT
+                DataMutex.ReleaseMutex(); // the server won't crash if others disconnect
+                IsIPBanned = false;
+                IsNameBanned = false;
+                return new ConnectResponseDTO() { Response = 7 };
+            }
+
+            if (IsNameBanned)
+            {
+                // GET OUT
+                DataMutex.ReleaseMutex(); // the server won't crash if others disconnect
+                IsNameBanned = false;
+                return new ConnectResponseDTO() { Response = 6 };
+            }
 
             int counter = 0;
             int playerNumber = -1;
