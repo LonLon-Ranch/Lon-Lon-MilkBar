@@ -8,6 +8,7 @@ using BOTWM.Server.DataTypes;
 using BOTW.Logging;
 using Newtonsoft.Json.Linq;
 using System.Net.NetworkInformation;
+using System.Numerics;
 
 namespace BOTW.DedicatedServer
 {
@@ -1017,6 +1018,45 @@ namespace BOTW.DedicatedServer
         {
             server.pvp = !server.pvp;
             Logger.LogInformation(!server.pvp ? "Deactivated pvp" : "Activated pvp", color: commandColors);
+        }
+
+        [ServerCommand]
+        [Description("Ban someone, you do not ban the playername but the player's IP")]
+        [ExtraHelp("Usage: Ban <playername>")]
+        public void Ban(string value)
+        {
+            if (server.ipToPlayer.ContainsKey(value))
+            {
+                server.BanIP(value);
+                Kick(value);
+            }
+            else
+            {
+                Logger.LogWarning($"Player {value} is not currently connected.");
+            }
+        }
+
+        [ServerCommand]
+        [Description("Kick someone from the server")]
+        [ExtraHelp("Usage: Kick <playername>")]
+        public void Kick(string value)
+        {
+            if (server.ipToPlayer.ContainsKey(value))
+            {
+                server.KickName(value);
+            }
+            else
+            {
+                Logger.LogWarning($"Player {value} is not currently connected.");
+            }
+        }
+
+        [ServerCommand]
+        [Description("UnBan someone, you do not ban the playername but the player's IP")]
+        [ExtraHelp("Usage: Ban <playername>")]
+        public void UnBan(string value)
+        {
+            server.UnBanPlayer(value);
         }
 
 
