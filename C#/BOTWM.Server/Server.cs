@@ -37,6 +37,7 @@ namespace BOTWM.Server
         public int ClientLog { get; set; }
         public bool ServerLog { get; set; }
 
+
         Socket listen;
         Thread listenThread;
         List<Thread> clientThreads = new List<Thread>();
@@ -112,30 +113,95 @@ namespace BOTWM.Server
                 clientThread.Abort();
         }
 
+        public Dictionary<string, string> bannedIPs = new Dictionary<string, string>(); // List of banned IP associated with names
+        public Dictionary<string, string> ipToPlayer = new Dictionary<string, string>(); // List of players associated with IPs
+
+
+        private void LoadBannedIPs()
+        {
+            if (!File.Exists("banned_ips.json"))
+            {
+                File.Create("banned_ips.json").Close();
+            }
+            string json = File.ReadAllText("banned_ips.json");
+            bannedIPs = JsonConvert.DeserializeObject<Dictionary<string, string>>(json)
+                    ?? new Dictionary<string, string>();
+        }
+
+        public string GetIPFromPlayer(string playerName)
+        {
+            return ipToPlayer.ContainsKey(playerName) ? ipToPlayer[playerName] : "Unknown IP";
+        }
+
         public void startListen()
         {
+            LoadBannedIPs();
             listenThread = new Thread(serverListen);
             listenThread.IsBackground = true;
             listenThread.Start();
         }
 
-        public void serverListen()
+        private void SaveBannedIPs()
         {
-            while(true)
+            string json = JsonConvert.SerializeObject(bannedIPs, Formatting.Indented);
+            File.WriteAllText("banned_ips.json", json);
+        }
+
+        public void BanIP(string PlayerName)
+        {
+            string ip = GetIPFromPlayer(PlayerName);
+            if (!bannedIPs.Values.Contains(ip))
             {
-                Socket connection;
-
-                listen.Listen(100);
-
-                connection = listen.Accept();
-
-                var clientThread = new Thread(() => handleClient(connection));
-                clientThread.Start();
-                clientThreads.Add(clientThread);
+                bannedIPs[PlayerName] = ip;
+                SaveBannedIPs();
+                Logger.LogInformation($"Banned player {PlayerName} with the IP {ip}");
+            }
+            else
+            {
+                Logger.LogInformation($"IP {ip} is already banned.");
             }
         }
 
-        public void handleClient(Socket connection)
+        public void KickName(string PlayerName)
+        {
+            ipToPlayer.Remove(PlayerName);
+        }
+
+        public void UnBanPlayer(string Player)
+        {
+            if (bannedIPs.ContainsKey(Player))
+            {
+                string unbannedIP = bannedIPs[Player];
+                bannedIPs.Remove(Player);
+                SaveBannedIPs();
+
+                Logger.LogInformation($"UnBanned player {Player} with the IP {unbannedIP}");
+            }
+            else
+            {
+                Logger.LogInformation($"Player {Player} is not in the ban list.");
+            }
+        }
+
+        public void serverListen()
+        {
+            while (true)
+            {
+                listen.Listen(100);
+                Socket connection = listen.Accept();
+
+                string clientIP = ((IPEndPoint)connection.RemoteEndPoint).Address.ToString();
+                
+                
+                var clientThread = new Thread(() => handleClient(connection, clientIP));
+                clientThread.Start();
+                clientThreads.Add(clientThread);
+                
+            }
+        }
+
+
+        public void handleClient(Socket connection, string clientIP)
         {
             int SIZE = 10240;
 
@@ -177,7 +243,7 @@ namespace BOTWM.Server
 
                     if (retries > 0)
                     {
-                        Logger.LogInformation($"[{PlayerName}] Retried {retries} times and took {RetryWatch.ElapsedMilliseconds} milliseconds");
+                        //Logger.LogInformation($"[{PlayerName}] Retried {retries} times and took {RetryWatch.ElapsedMilliseconds} milliseconds");
                         retries = 0;
                     }
 
@@ -216,7 +282,27 @@ namespace BOTWM.Server
                     else if (ClientMessage.Item1 == MessageType.connect)
                     {
                         ConnectDTO UserConfiguration = (ConnectDTO)ClientMessage.Item2;
+
+                        if (bannedIPs.Values.Contains(clientIP))
+                        {
+                            ServerData.IsIPBanned = true;
+                        }
+
+                        if (bannedIPs.ContainsKey(UserConfiguration.Name))
+                        {
+                            ServerData.IsNameBanned = true;
+                        }
+
                         ConnectResponseDTO AssignationResult = ServerData.TryAssigning(UserConfiguration);
+                        if (AssignationResult.Response == 7)
+                        {
+                            connection.Send(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(AssignationResult)));
+                            connection.Close();
+                            ClientConnected = false;
+                            var Name = bannedIPs.FirstOrDefault(x => x.Value == clientIP).Key;
+                            Logger.LogInformation($"Blocked connection attempt from banned IP: {clientIP} Banned with the name: {Name}");
+                            break;
+                        }
 
                         if (AssignationResult.Response != 1)
                         {
@@ -232,6 +318,8 @@ namespace BOTWM.Server
                         PlayerName = ServerData.PlayerList[PlayerNumber].Name;
                         connection.Send(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(AssignationResult)));
 
+                        ipToPlayer[PlayerName] = clientIP; // very importent
+
                         Logger.LogInformation($"Player {UserConfiguration.Name} joined the server. Assigned to player {AssignationResult.PlayerNumber + 1}.");
                     }
                     else if (ClientMessage.Item1 == MessageType.update)
@@ -239,9 +327,20 @@ namespace BOTWM.Server
                         // Validate PlayerNumber before proceeding
                         if (PlayerNumber < 0 || PlayerNumber >= ServerData.PlayerList.Count)
                         {
+                            if (ipToPlayer.ContainsKey(PlayerName))
+                                ipToPlayer.Remove(PlayerName);
                             Logger.LogError($"Invalid PlayerNumber: {PlayerNumber}. Disconnecting client.");
                             connection.Close();
                             ClientConnected = false;
+                            break;
+                        }
+
+                        if (!ipToPlayer.ContainsKey(PlayerName)) // kick system
+                        {
+                            Logger.LogInformation($"Player {PlayerName} disconnected.");
+                            connection.Close();
+                            ClientConnected = false;
+                            ServerData.SetConnection(PlayerNumber, false);
                             break;
                         }
 
@@ -266,12 +365,15 @@ namespace BOTWM.Server
                         // Validate PlayerNumber before proceeding
                         if (PlayerNumber < 0 || PlayerNumber >= ServerData.PlayerList.Count)
                         {
+                            if (ipToPlayer.ContainsKey(PlayerName))
+                                ipToPlayer.Remove(PlayerName);
                             Logger.LogError($"Invalid PlayerNumber: {PlayerNumber}. Disconnecting client.");
                             connection.Close();
                             ClientConnected = false;
                             break;
                         }
-
+                        if (ipToPlayer.ContainsKey(PlayerName))
+                            ipToPlayer.Remove(PlayerName);
                         Logger.LogInformation($"Player {ServerData.GetPlayer(PlayerNumber).Name} disconnected. {(string)ClientMessage.Item2}");
                         connection.Close();
                         ClientConnected = false;
@@ -296,7 +398,8 @@ namespace BOTWM.Server
                     {
                         ServerData.SetConnection(PlayerNumber, false);
                     }
-
+                    if (ipToPlayer.ContainsKey(PlayerName))
+                        ipToPlayer.Remove(PlayerName);
                     connection.Close();
                     ClientConnected = false;
                 }
