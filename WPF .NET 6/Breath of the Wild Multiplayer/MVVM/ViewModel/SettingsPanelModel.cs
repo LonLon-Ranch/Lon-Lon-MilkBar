@@ -128,6 +128,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 
             this.EnableCustomModels = Properties.Settings.Default.playAsModel;
             this.EnableDiscordRPC = Properties.Settings.Default.UseRPC;
+            this.EnableBCML = Properties.Settings.Default.UseBcml;
             this.RPCDisplayServer = Properties.Settings.Default.RPCDisplayServer;
 
             backgroundLeftButton = new RelayCommand(async o =>
