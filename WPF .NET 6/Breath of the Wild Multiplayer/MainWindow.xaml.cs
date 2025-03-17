@@ -98,18 +98,52 @@ namespace Breath_of_the_Wild_Multiplayer
         {
             CopyAppdataFiles();
 
-            if(Properties.Settings.Default.bcmlLocation == "")
+            if (Properties.Settings.Default.CemuWarning == false)
             {
+                string Roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 string Local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-
-                if (File.Exists($"{Local}/bcml/settings.json"))
+                if (File.Exists($"{Roaming}/ukmm/settings.yml"))
+                {
+                    Properties.Settings.Default.ukmmSettingLocation = $"{Roaming}/ukmm/settings.yml";
+                    Properties.Settings.Default.Save();
+                    Properties.Settings.Default.UseBcml = false;
+                }
+                else if (File.Exists($"{Local}/bcml/settings.json"))
                 {
                     Properties.Settings.Default.bcmlLocation = $"{Local}/bcml/settings.json";
                     Properties.Settings.Default.Save();
+                    Properties.Settings.Default.UseBcml = true;
+                }
+            }
+            else
+            {
+                if (Properties.Settings.Default.UseBcml)
+                {
+                    if (Properties.Settings.Default.bcmlLocation == "")
+                    {
+                        string Local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                        if (File.Exists($"{Local}/bcml/settings.json"))
+                        {
+                            Properties.Settings.Default.bcmlLocation = $"{Local}/bcml/settings.json";
+                            Properties.Settings.Default.Save();
+                        }
+                    }
+                }
+                else
+                {
+                    if (Properties.Settings.Default.ukmmSettingLocation == "")
+                    {
+                        string Roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); ;
+                        if (File.Exists($"{Roaming}/ukmm/settings.yml"))
+                        {
+                            Properties.Settings.Default.ukmmSettingLocation = $"{Roaming}/ukmm/settings.yml";
+                            Properties.Settings.Default.Save();
+                        }
+                    }
                 }
             }
 
-            Asserts.Asserts_function(); // call the asserts function
+                Asserts.Asserts_function(); // call the asserts function
 
             if (Properties.Settings.Default.UseRPC)
             {
