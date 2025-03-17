@@ -22,6 +22,12 @@ namespace BOTWM.Common
                 case 5:
                     error = "User already exists with same name";
                     break;
+                case 6:
+                    error = "The name you are using is banned in this server";
+                    break;
+                case 7:
+                    error = "Your IP is banned in this server";
+                    break;
                 default:
                     error = "Unknown error code";
                     break;
