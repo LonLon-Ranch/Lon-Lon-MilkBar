@@ -1,4 +1,4 @@
-﻿using System;
+n﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.View
             InitializeComponent();
             if (DiscordRichPresence.client != null)
             {
-                DiscordRichPresence.updateRPC(false, "Model Selection", "", 0, 0);
+                DiscordRichPresence.updateRPC(false, "Settings", "", 0, 0);
             }
         }
 
