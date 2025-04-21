@@ -133,7 +133,7 @@ namespace Breath_of_the_Wild_Multiplayer
                 {
                     if (Properties.Settings.Default.ukmmSettingLocation == "")
                     {
-                        string Roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); ;
+                        string Roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                         if (File.Exists($"{Roaming}/ukmm/settings.yml"))
                         {
                             Properties.Settings.Default.ukmmSettingLocation = $"{Roaming}/ukmm/settings.yml";
