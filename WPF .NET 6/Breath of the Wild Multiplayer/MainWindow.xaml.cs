@@ -105,14 +105,14 @@ namespace Breath_of_the_Wild_Multiplayer
                 if (File.Exists($"{Roaming}/ukmm/settings.yml"))
                 {
                     Properties.Settings.Default.ukmmSettingLocation = $"{Roaming}/ukmm/settings.yml";
-                    Properties.Settings.Default.Save();
                     Properties.Settings.Default.UseBcml = false;
+                    Properties.Settings.Default.Save();
                 }
                 else if (File.Exists($"{Local}/bcml/settings.json"))
                 {
                     Properties.Settings.Default.bcmlLocation = $"{Local}/bcml/settings.json";
-                    Properties.Settings.Default.Save();
                     Properties.Settings.Default.UseBcml = true;
+                    Properties.Settings.Default.Save();
                 }
             }
             else
