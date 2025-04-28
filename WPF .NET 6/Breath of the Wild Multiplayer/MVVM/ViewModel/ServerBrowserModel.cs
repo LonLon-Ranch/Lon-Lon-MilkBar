@@ -369,6 +369,27 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 
             SharedData.SetLoadingMessage("Loading player data...");
 
+            if (!Properties.Settings.Default.UseBcml && !Directory.Exists($"{CemuDir}/graphicPacks/BOTWMPPatches"))
+            {
+                string appFolder = AppDomain.CurrentDomain.BaseDirectory;
+                string patchesFolder = $"{appFolder}/ModFiles/patches";
+                string destinationFolder = $"{CemuDir}/graphicPacks/BOTWMPPatches";
+                
+
+                Directory.CreateDirectory(destinationFolder);
+                
+
+                string[] files = Directory.GetFiles(patchesFolder);
+
+                foreach (string filePath in files)
+                {
+                    string fileName = Path.GetFileName(filePath);
+                    string destPath = Path.Combine(destinationFolder, fileName);
+
+                    File.Copy(filePath, destPath);
+                }
+            }
+
             await Task.Run(() => GameFilesModifier.ChangeAttentionForJugadores(serverToJoin.playStyle != "Prop hunt"));
 
             await Task.Run(() => GameFilesModifier.CleanAnimations());
