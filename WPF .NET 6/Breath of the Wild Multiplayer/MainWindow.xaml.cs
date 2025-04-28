@@ -143,7 +143,10 @@ namespace Breath_of_the_Wild_Multiplayer
                 }
             }
 
-                Asserts.Asserts_function(); // call the asserts function
+            if (Properties.Settings.Default.UseBcml)
+            {
+                Asserts.Asserts_function(); // call the asserts function, disabled for ukmm
+            }
 
             if (Properties.Settings.Default.UseRPC)
             {
