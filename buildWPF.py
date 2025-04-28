@@ -82,7 +82,7 @@ def FixPublish():
         ClearFolder(Output, ["publish", "DedicatedServer"])
         copyFolder(f"{Output}/publish", Output)
         rmtree(f"{Output}/publish")
-        os.mkdir(f"{Output}/BNPs")
+        os.mkdir(f"{Output}/ModFiles")
 
     ClearFolder(f"{Output}/DedicatedServer", ["publish"])
     copyFolder(f"{Output}/DedicatedServer/publish", f"{Output}/DedicatedServer")
@@ -96,13 +96,14 @@ if(os.path.exists(Output)):
 BuildProject(GUIAppProject)
 if not sys.platform == "linux":
     BuildProject(WPFProject)
-    os.mkdir(f"{Output}/BNPs")
+    os.mkdir(f"{Output}/ModFiles")
+    os.mkdir(f"{Output}/ModFiles/patches")
 
     FixPublish()
     BuildDLL()
 
-    for file in os.listdir(f"{os.getcwd()}/BNP Files"):
-        if not ".bnp" in file: continue
-        copyFile(f"{os.getcwd()}/BNP Files/{file}", f"{Output}/BNPs/{file}")
+    for file in os.listdir(f"{os.getcwd()}/ModFiles"):
+        copyFile(f"{os.getcwd()}/ModFiles/{file}", f"{Output}/ModFiles/{file}")
+    copytree(f"{os.getcwd()}/ModFiles/patches", f"{Output}/ModFiles/patches")
 else:
     FixPublish()
