@@ -104,6 +104,6 @@ if not sys.platform == "linux":
 
     for file in os.listdir(f"{os.getcwd()}/ModFiles"):
         copyFile(f"{os.getcwd()}/ModFiles/{file}", f"{Output}/ModFiles/{file}")
-    copytree(f"{os.getcwd()}/ModFiles/patches", f"{Output}/ModFiles/patches")
+    copytree(f"{os.getcwd()}/ModFiles/patches", f"{Output}/ModFiles/patches", dirs_exist_ok=True)
 else:
     FixPublish()
