@@ -4,6 +4,4 @@ name = Multiplayer utilities patches
 path = "The Legend of Zelda: Breath of the Wild/Multiplayer/Utilities"
 description = Multiplayer utilities patches
 version = 7
-
-[Default]
-$enabled = 0
+default = true
