@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Media3D;
+using YamlDotNet.RepresentationModel;
 
 namespace Breath_of_the_Wild_Multiplayer.Source_files
 {
@@ -30,14 +31,35 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
 
         public static void ChangeAttentionForJugadores(bool enabled)
         {
+            string ModLoaderPath = "";
             // Get bcml mod path to save data in that folder
-            string bcmlPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
+            if (Properties.Settings.Default.UseBcml)
+            {
+                ModLoaderPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
+            }
+            else
+            {
+                string ukmmModLocation = "";
+                using (StreamReader reader = new StreamReader(Properties.Settings.Default.ukmmSettingLocation))
+                {
+                    YamlStream yaml = new YamlStream();
+                    yaml.Load(reader);
+
+                    YamlMappingNode root = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+                    if (root.Children.TryGetValue(new YamlScalarNode("storage_dir"), out YamlNode storageDirNode))
+                    {
+                        ukmmModLocation = storageDirNode.ToString();
+                    }
+                }
+                ModLoaderPath = $@"{ukmmModLocation}\wiiu\profiles\Default\merged\content";
+            }
 
             List<Tuple<ISarcFile, AampLibAction>> filesToModify = new List<Tuple<ISarcFile, AampLibAction>>();
 
             List<ActorPack> jugadores = new List<ActorPack>();
 
-            foreach (string path in Directory.GetFiles(@$"{bcmlPath}\Actor\Pack\").Where(file => Path.GetFileName(file).StartsWith("Jugador")))
+            foreach (string path in Directory.GetFiles(@$"{ModLoaderPath}\Actor\Pack\").Where(file => Path.GetFileName(file).StartsWith("Jugador")))
             {
                 ActorPack jugador = new ActorPack(path);
                 ActorLink actorLinkFile = jugador.ActorLink.Files()[0];
@@ -61,14 +83,64 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
 
             /* Obtaining the data */
             // Get game folders so that we can extract the armors and files
-            string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
-            Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
-            string GameDir = settings["game_dir"];
-            string UpdateDir = settings["update_dir"];
 
+
+            string GameDir = "";
+            string UpdateDir = "";
+
+            string ModLoaderPath = "";
             // Get bcml mod path to save data in that folder
-            string bcmlPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
-            string titleBGPath = @$"{UpdateDir}\Pack\TitleBG.pack";
+            if (Properties.Settings.Default.UseBcml)
+            {
+                ModLoaderPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
+                string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
+                Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
+                GameDir = settings["game_dir"];
+                UpdateDir = settings["update_dir"];
+            }
+            else
+            {
+                string ukmmModLocation = "";
+                using (StreamReader reader = new StreamReader(Properties.Settings.Default.ukmmSettingLocation))
+                {
+                    YamlStream yaml = new YamlStream();
+                    yaml.Load(reader);
+
+                    YamlMappingNode root = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+                    if (root.Children.TryGetValue(new YamlScalarNode("storage_dir"), out YamlNode storageDirNode))
+                    {
+                        ukmmModLocation = storageDirNode.ToString();
+                    }
+
+                    // move to "wiiu_config"
+                    if (root.Children.TryGetValue(new YamlScalarNode("wiiu_config"), out var wiiuConfigNode) &&
+                        wiiuConfigNode is YamlMappingNode wiiuConfigMapping)
+                    {
+                        // move to "dump" > "source"
+                        if (wiiuConfigMapping.Children.TryGetValue(new YamlScalarNode("dump"), out var dumpNode) &&
+                            dumpNode is YamlMappingNode dumpMapping &&
+                            dumpMapping.Children.TryGetValue(new YamlScalarNode("source"), out var sourceNode) &&
+                            sourceNode is YamlMappingNode sourceMapping)
+                        {
+
+                            if (sourceMapping.Children.TryGetValue(new YamlScalarNode("content_dir"), out var contentDirNode))
+                            {
+                                GameDir = contentDirNode.ToString();
+                            }
+
+                            if (sourceMapping.Children.TryGetValue(new YamlScalarNode("update_dir"), out var updateDirNode))
+                            {
+                                UpdateDir = updateDirNode.ToString();
+                            }
+                        }
+                    }
+                }
+
+                ModLoaderPath = $@"{ukmmModLocation}\wiiu\profiles\Default\merged\content";
+            }
+
+            string titleBGPath = @$"{ModLoaderPath}\Pack\TitleBG.pack";
 
             /* Instantiate objects */
             // Create title bg object and load it's data
@@ -78,7 +150,7 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
             List<Model> totalModels = new List<Model>();
 
             /* Get armor models */
-            foreach (string path in Directory.GetFiles(@$"{UpdateDir}\Model\").Where(file => Path.GetFileName(file).StartsWith("Armor_") && !file.Contains("Tex")))
+            foreach (string path in Directory.GetFiles(@$"{ModLoaderPath}\Model\").Where(file => Path.GetFileName(file).StartsWith("Armor_") && !file.Contains("Tex")))
             {
                 BfresFile armorFile = new BfresFile(new MemoryStream(Yaz0.Decompress(File.ReadAllBytes(path))));
 
@@ -119,7 +191,7 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
 
                         outputModel.Name = fileName;
 
-                        fileToSave.Add($@"{bcmlPath}/Model/Test/{fileName}.sbfres", outputModel);
+                        fileToSave.Add($@"{ModLoaderPath}/Model/Test/{fileName}.sbfres", outputModel);
                     }
                 });
 
@@ -141,13 +213,60 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
         {
             /* Obtaining the data */
             // Get game folders so that we can extract the armors and files
-            string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
-            Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
-            string GameDir = settings["game_dir"];
-            string UpdateDir = settings["update_dir"];
+            string GameDir = "";
+            string UpdateDir = "";
 
+            string ModLoaderPath = "";
             // Get bcml mod path to save data in that folder
-            string bcmlPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
+            if (Properties.Settings.Default.UseBcml)
+            {
+                ModLoaderPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
+                string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
+                Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
+                GameDir = settings["game_dir"];
+                UpdateDir = settings["update_dir"];
+            }
+            else
+            {
+                string ukmmModLocation = "";
+                using (StreamReader reader = new StreamReader(Properties.Settings.Default.ukmmSettingLocation))
+                {
+                    YamlStream yaml = new YamlStream();
+                    yaml.Load(reader);
+
+                    YamlMappingNode root = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+                    if (root.Children.TryGetValue(new YamlScalarNode("storage_dir"), out YamlNode storageDirNode))
+                    {
+                        ukmmModLocation = storageDirNode.ToString();
+                    }
+
+                    // move to "wiiu_config"
+                    if (root.Children.TryGetValue(new YamlScalarNode("wiiu_config"), out var wiiuConfigNode) &&
+                        wiiuConfigNode is YamlMappingNode wiiuConfigMapping)
+                    {
+                        // move to "dump" > "source"
+                        if (wiiuConfigMapping.Children.TryGetValue(new YamlScalarNode("dump"), out var dumpNode) &&
+                            dumpNode is YamlMappingNode dumpMapping &&
+                            dumpMapping.Children.TryGetValue(new YamlScalarNode("source"), out var sourceNode) &&
+                            sourceNode is YamlMappingNode sourceMapping)
+                        {
+
+                            if (sourceMapping.Children.TryGetValue(new YamlScalarNode("content_dir"), out var contentDirNode))
+                            {
+                                GameDir = contentDirNode.ToString();
+                            }
+
+                            if (sourceMapping.Children.TryGetValue(new YamlScalarNode("update_dir"), out var updateDirNode))
+                            {
+                                UpdateDir = updateDirNode.ToString();
+                            }
+                        }
+                    }
+                }
+                ModLoaderPath = $@"{ukmmModLocation}\wiiu\profiles\Default\merged\content";
+            }
+
             string titleBGPath = @$"{UpdateDir}\Pack\TitleBG.pack";
 
             /* Instantiate objects */
@@ -158,7 +277,7 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
             /************ Player model ************/
             /* Modify Link models */
             // Create outputModel
-            if(!File.Exists($@"{bcmlPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres"))
+            if(!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres"))
             {
                 byte[] LinkDecompressed = Yaz0.Decompress(titleBG.LoadedData["Model/Link.sbfres"].ToArray());
                 BfresFile outputModel = new BfresFile(new MemoryStream(LinkDecompressed));
@@ -211,12 +330,12 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
                     outputModel.ToBinary(ms);
                 }
 
-                File.WriteAllBytes($@"{bcmlPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres", Yaz0.Compress(ms.ToArray()).ToArray());
+                File.WriteAllBytes($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres", Yaz0.Compress(ms.ToArray()).ToArray());
             }
 
             /************ Player textures ************/
             /* Modify Link's tex1 file */
-            if(!File.Exists($@"{bcmlPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres"))
+            if(!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres"))
             {
                 byte[] LinkDecompressed = Yaz0.Decompress(File.ReadAllBytes($@"{GameDir}\Model\Link.Tex1.sbfres"));
                 BfresFile outputTexture = new BfresFile(new MemoryStream(LinkDecompressed));
@@ -250,11 +369,11 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
                     outputTexture.ToBinary(ms);
                 }
 
-                File.WriteAllBytes($@"{bcmlPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres", Yaz0.Compress(ms.ToArray()).ToArray());
+                File.WriteAllBytes($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres", Yaz0.Compress(ms.ToArray()).ToArray());
             }
 
             /* Modify Link's tex2 file */
-            if (!File.Exists($@"{bcmlPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres"))
+            if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres"))
             {
                 byte[] LinkDecompressed = Yaz0.Decompress(titleBG.LoadedData["Model/Link.Tex2.sbfres"].ToArray());
                 BfresFile outputTexture = new BfresFile(new MemoryStream(LinkDecompressed));
@@ -285,7 +404,7 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
                     outputTexture.ToBinary(ms);
                 }
 
-                File.WriteAllBytes($@"{bcmlPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres", Yaz0.Compress(ms.ToArray()).ToArray());
+                File.WriteAllBytes($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres", Yaz0.Compress(ms.ToArray()).ToArray());
             }
         }
 
@@ -336,14 +455,61 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
         {
             /* Obtaining the data */
             // Get game folders so that we can extract the armors and files
-            string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
-            Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
-            string GameDir = settings["game_dir"];
+            string GameDir = "";
+            string UpdateDir = "";
 
+            string ModLoaderPath = "";
             // Get bcml mod path to save data in that folder
-            string bcmlPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
+            if (Properties.Settings.Default.UseBcml)
+            {
+                ModLoaderPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
+                string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
+                Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
+                GameDir = settings["game_dir"];
+                UpdateDir = settings["update_dir"];
+            }
+            else
+            {
+                string ukmmModLocation = "";
+                using (StreamReader reader = new StreamReader(Properties.Settings.Default.ukmmSettingLocation))
+                {
+                    YamlStream yaml = new YamlStream();
+                    yaml.Load(reader);
 
-            if (!File.Exists($@"{bcmlPath}/Model/Player_Animation_NoFace.sbfres"))
+                    YamlMappingNode root = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+                    if (root.Children.TryGetValue(new YamlScalarNode("storage_dir"), out YamlNode storageDirNode))
+                    {
+                        ukmmModLocation = storageDirNode.ToString();
+                    }
+
+                    // move to "wiiu_config"
+                    if (root.Children.TryGetValue(new YamlScalarNode("wiiu_config"), out var wiiuConfigNode) &&
+                        wiiuConfigNode is YamlMappingNode wiiuConfigMapping)
+                    {
+                        // move to "dump" > "source"
+                        if (wiiuConfigMapping.Children.TryGetValue(new YamlScalarNode("dump"), out var dumpNode) &&
+                            dumpNode is YamlMappingNode dumpMapping &&
+                            dumpMapping.Children.TryGetValue(new YamlScalarNode("source"), out var sourceNode) &&
+                            sourceNode is YamlMappingNode sourceMapping)
+                        {
+
+                            if (sourceMapping.Children.TryGetValue(new YamlScalarNode("content_dir"), out var contentDirNode))
+                            {
+                                GameDir = contentDirNode.ToString();
+                            }
+
+                            if (sourceMapping.Children.TryGetValue(new YamlScalarNode("update_dir"), out var updateDirNode))
+                            {
+                                UpdateDir = updateDirNode.ToString();
+                            }
+                        }
+                    }
+                }
+                ModLoaderPath = $@"{ukmmModLocation}\wiiu\profiles\Default\merged\content";
+            }
+
+            if (!File.Exists($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres"))
             {
                 var res = new BfresFile(new MemoryStream(Yaz0.Decompress(File.ReadAllBytes($@"{GameDir}\Model\Player_Animation.sbfres"))));
                 res.Name = "Player_Animation_NoFace";
@@ -372,7 +538,7 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
                     res.ToBinary(ms);
                 }
 
-                File.WriteAllBytes($@"{bcmlPath}/Model/Player_Animation_NoFace.sbfres", Yaz0.Compress(ms.ToArray()).ToArray());
+                File.WriteAllBytes($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres", Yaz0.Compress(ms.ToArray()).ToArray());
             }
         }
 
@@ -395,8 +561,30 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
         {
             List<Tuple<ISarcFile, AampLibAction>> filesToModify = new List<Tuple<ISarcFile, AampLibAction>>();
 
-            string bcmlPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
-            string titleBGPath = @$"{bcmlPath}\Pack\TitleBG.pack";
+            string ModLoaderPath = "";
+            if (Properties.Settings.Default.UseBcml)
+            {
+                ModLoaderPath = Properties.Settings.Default.bcmlLocation.Replace("settings.json", @"merged\content");
+            }
+            else
+            {
+                string ukmmModLocation = "";
+                using (StreamReader reader = new StreamReader(Properties.Settings.Default.ukmmSettingLocation))
+                {
+                    YamlStream yaml = new YamlStream();
+                    yaml.Load(reader);
+
+                    YamlMappingNode root = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+                    if (root.Children.TryGetValue(new YamlScalarNode("storage_dir"), out YamlNode storageDirNode))
+                    {
+                        ukmmModLocation = storageDirNode.ToString();
+                    }
+                }
+                ModLoaderPath = $@"{ukmmModLocation}\wiiu\profiles\Default\merged\content";
+            }
+
+            string titleBGPath = @$"{ModLoaderPath}\Pack\TitleBG.pack";
 
             TitleBG titleBG = new TitleBG(titleBGPath);
             ActorPack gameRomPlayer = titleBG.Actor.Pack.Actors.File("GameROMPlayer");
@@ -426,13 +614,13 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
             filesToModify.Add(titleBG.Actor.Pack.Actors.File("Armor_Default_Extra_00").ModelList.Files()[0].ModifyModel(armorFolder, armorModelBase.Replace("##", "00")));
             filesToModify.Add(titleBG.Actor.Pack.Actors.File("Armor_Default_Extra_01").ModelList.Files()[0].ModifyModel(armorFolder, armorModelBase.Replace("##", "01")));
 
-            ActorPack pauseMenuActor = new ActorPack(@$"{bcmlPath}\Actor\Pack\PauseMenuPlayer.sbactorpack");
+            ActorPack pauseMenuActor = new ActorPack(@$"{ModLoaderPath}\Actor\Pack\PauseMenuPlayer.sbactorpack");
             filesToModify.Add(pauseMenuActor.ModelList.Files()[0].ModifyModel(folder, model));
             filesToModify.Add(pauseMenuActor.ASList.Files()[0].ModifyAnimation(isNotLink));
 
             List<ActorPack> armors = new List<ActorPack>();
 
-            foreach (string path in Directory.GetFiles(@$"{bcmlPath}\Actor\Pack\").Where(file => Path.GetFileName(file).StartsWith("Armor_")))
+            foreach (string path in Directory.GetFiles(@$"{ModLoaderPath}\Actor\Pack\").Where(file => Path.GetFileName(file).StartsWith("Armor_")))
             {
                 ActorPack armorActor = new ActorPack(path);
                 ModelList modelListFile = armorActor.ModelList.Files()[0];

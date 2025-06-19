@@ -83,7 +83,7 @@
                 Command="{Binding bcmlButton}" 
                 Style="{StaticResource customButton}" Margin="0,40,0,80" Grid.RowSpan="2">
                 <Button.Tag>
-                    <sys:String>Launch settings</sys:String>
+                    <sys:String>BCML settings</sys:String>
                 </Button.Tag>
 
                 <Button.ToolTip>
@@ -105,13 +105,13 @@
                 </Button.Tag>
             </Button>
 
-            <Button Content="Milkbar Studios" Style="{StaticResource DiscordButtons}" Command="{Binding discordButton}" Margin="-520,26,497,4" Grid.Row="3"  Height="150" Width="150" Grid.RowSpan="2">
+            <Button Content="Milkbar Studios" Style="{StaticResource DiscordButtons}" Command="{Binding discordButton}" Margin="-471,88,551,32" Grid.Row="2"  Height="150" Width="150" Grid.RowSpan="3">
                 <Button.Tag>
                     <BitmapImage UriSource="/Images/milkbar_Logo.png"/>
                 </Button.Tag>
             </Button>
 
-            <Button Content="Lon Lon Ranch" Style="{StaticResource DiscordButtons}" Command="{Binding ForkdiscordButton}" Margin="-682,26,652,4" Grid.Row="3" Height="150px" Width="150px" Grid.RowSpan="2">
+            <Button Content="Lon Lon Ranch" Style="{StaticResource DiscordButtons}" Command="{Binding ForkdiscordButton}" Margin="-630,88,710,32" Grid.Row="2" Height="150px" Width="150px" Grid.RowSpan="3">
                 <Button.Tag>
                     <BitmapImage UriSource="/Images/lonlon_Logo.png"/>
                 </Button.Tag>
@@ -126,6 +126,20 @@
                 <CheckBox.ToolTip>
                     <ToolTip
                         Content="*EXPERIMENTAL FEATURE* This feature is unstable. If you crash on startup, try disabling this feature. "
+                        Style="{StaticResource customTooltip}">
+                    </ToolTip>
+                </CheckBox.ToolTip>
+            </CheckBox>
+
+            <CheckBox
+                Content="ModLoader"
+                Grid.Row="4"
+                Style="{StaticResource UKMMcustomCheckbox}"
+                IsChecked="{Binding EnableBCML}" Margin="-580,14,589,0">
+
+                <CheckBox.ToolTip>
+                    <ToolTip
+                        Content="Restarts the application to apply changes"
                         Style="{StaticResource customTooltip}">
                     </ToolTip>
                 </CheckBox.ToolTip>

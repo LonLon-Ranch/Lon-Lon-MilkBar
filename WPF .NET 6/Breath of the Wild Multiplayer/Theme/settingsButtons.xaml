@@ -160,6 +160,112 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="CheckBox" x:Key="UKMMcustomCheckbox">
+        <Setter Property="Background" Value="#AA000000"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="#FF626262"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Border Background="#88232323" Margin="15" CornerRadius="5">
+                        <Border Background="Transparent" BorderThickness="2" BorderBrush="#FF9A9A9A" Margin="2" CornerRadius="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.35*"/>
+                                    <ColumnDefinition Width="0.65*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="{TemplateBinding Content}"
+                                       VerticalAlignment="Center"
+                                       FontFamily="Roboto"
+                                       FontSize="26"
+                                       FontStyle="Normal"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       Margin="15, 0, 0, 0"/>
+                                <Border Background="{TemplateBinding Background}" Grid.Column="1" Margin="10" CornerRadius="3">
+                                    <Border Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2" Margin="2">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.5*"/>
+                                                <ColumnDefinition Width="0.5*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border
+                                                CornerRadius="0, 3, 3, 0"
+                                                HorizontalAlignment="Stretch"
+                                                Grid.Column="0">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding EnableBCML}" Value="True">
+                                                                <Setter Property="Background" Value="#CCFFFFFF"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+
+                                                <Label Content="BCML"
+                                                       HorizontalAlignment="Stretch"
+                                                       HorizontalContentAlignment="Center"
+                                                       FontFamily="Roboto"
+                                                       FontSize="22"
+                                                       FontStyle="Normal"
+                                                       Foreground="White">
+
+                                                    <Label.Effect>
+                                                        <DropShadowEffect Color="Black" ShadowDepth="0" Opacity="1" BlurRadius="20"/>
+                                                    </Label.Effect>
+                                                </Label>
+                                            </Border>
+
+                                            <Border
+                                                CornerRadius="3, 0, 0, 3"
+                                                HorizontalAlignment="Stretch"
+                                                Grid.Column="1">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding EnableBCML}" Value="False">
+                                                                <Setter Property="Background" Value="#CCFFFFFF"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+
+                                                <Label Content="UKMM"
+                                                       HorizontalAlignment="Stretch"
+                                                       HorizontalContentAlignment="Center"
+                                                       FontFamily="Roboto"
+                                                       FontSize="22"
+                                                       FontStyle="Normal"
+                                                       Foreground="White">
+
+                                                    <Label.Effect>
+                                                        <DropShadowEffect Color="Black" ShadowDepth="0" Opacity="1" BlurRadius="20"/>
+                                                    </Label.Effect>
+                                                </Label>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="BorderBrush" Value="#FF808080"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#CC000000"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="CheckBox" x:Key="discordCustomCheckbox">
         <Setter Property="Background" Value="#AA000000"/>
         <Setter Property="Foreground" Value="White"/>

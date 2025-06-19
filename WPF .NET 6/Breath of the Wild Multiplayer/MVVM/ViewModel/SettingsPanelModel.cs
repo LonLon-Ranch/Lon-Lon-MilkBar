@@ -14,10 +14,11 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 {
     public class SettingsPanelModel : ObservableObject
     {
-       
+
+        public static string VersionInText => $"{MainWindow.VERSION}";
 
         private bool _enableCustomModels;
-        public static string VersionInText => $"{MainWindow.VERSION}";
+        
         public bool EnableCustomModels
         {
             get { return _enableCustomModels; }
@@ -28,6 +29,21 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private bool _enableBCML;
+
+        public bool EnableBCML
+        {
+            get { return _enableBCML; }
+            set
+            {
+                _enableBCML = value;
+                Properties.Settings.Default.UseBcml = value;
+                Properties.Settings.Default.Save();
+                OnPropertyChanged();
+            }
+        }
+
         private bool _enableDiscordRPC;
         
         public bool EnableDiscordRPC
@@ -112,6 +128,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 
             this.EnableCustomModels = Properties.Settings.Default.playAsModel;
             this.EnableDiscordRPC = Properties.Settings.Default.UseRPC;
+            this.EnableBCML = Properties.Settings.Default.UseBcml;
             this.RPCDisplayServer = Properties.Settings.Default.RPCDisplayServer;
 
             backgroundLeftButton = new RelayCommand(async o =>
@@ -176,8 +193,10 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
                 Properties.Settings.Default.playAsModel = false;
                 Properties.Settings.Default.UseRPC = true;
                 Properties.Settings.Default.RPCDisplayServer = true;
+                Properties.Settings.Default.UseBcml = false;
                 this.EnableCustomModels = Properties.Settings.Default.playAsModel;
                 this.EnableDiscordRPC = Properties.Settings.Default.UseRPC;
+                this.EnableBCML = Properties.Settings.Default.UseBcml;
                 this.RPCDisplayServer = Properties.Settings.Default.RPCDisplayServer;
                 index = 0;
                 updateBackground();

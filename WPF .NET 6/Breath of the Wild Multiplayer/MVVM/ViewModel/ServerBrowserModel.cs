@@ -19,6 +19,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Net;
 using System.Xml.Linq;
+using YamlDotNet.RepresentationModel;
 
 namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 {
@@ -117,14 +118,44 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 
         public static bool CemuSettingsOGRPCState;
 
+        public string GetCemuSettingFile()
+        {
+            string CemuDir = "";
+            string CemuSettingFile = "";
+            if (Properties.Settings.Default.UseBcml)
+            {
+                string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
+                Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
+                CemuDir = settings["cemu_dir"];
+            }
+            else
+            {
+                using (StreamReader reader = new StreamReader(Properties.Settings.Default.ukmmSettingLocation))
+                {
+                    YamlStream yaml = new YamlStream();
+                    yaml.Load(reader);
+                    YamlMappingNode root = (YamlMappingNode)yaml.Documents[0].RootNode;
+                    if (root.Children.TryGetValue(new YamlScalarNode("wiiu_config"), out var wiiuConfigNode) &&
+                        wiiuConfigNode is YamlMappingNode wiiuConfigMapping)
+                    {
+                        // Move to "deploy_config" > "executable"
+                        if (wiiuConfigMapping.Children.TryGetValue(new YamlScalarNode("deploy_config"), out var deployConfigNode) &&
+                            deployConfigNode is YamlMappingNode deployConfigMapping &&
+                            deployConfigMapping.Children.TryGetValue(new YamlScalarNode("executable"), out var executableNode))
+                        {
+                            CemuDir = Path.GetDirectoryName(executableNode.ToString())!;
+                        }
+                    }
+                }
+            }
+            CemuSettingFile = $"{CemuDir}/settings.xml";
+            return CemuSettingFile;
+        }
+
         public void GetOGCemuRPC()
         {
-            string CemuDir;
+            string CemuSetting = GetCemuSettingFile();
 
-            string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
-            Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
-            CemuDir = settings["cemu_dir"];
-            string CemuSetting = $"{CemuDir}/settings.xml";
             try
             {
                 XDocument xmlDoc = XDocument.Load(CemuSetting);
@@ -145,12 +176,7 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 
         public void ModifyRPCInCemu(string state)
         {
-            string CemuDir;
-
-            string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
-            Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
-            CemuDir = settings["cemu_dir"];
-            string CemuSetting = $"{CemuDir}/settings.xml";
+            string CemuSetting = GetCemuSettingFile(); ;
             try
             {
                 XDocument xmlDoc = XDocument.Load(CemuSetting);
@@ -264,10 +290,46 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
         {
             try
             {
-                string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
-                Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
-                CemuDir = settings["cemu_dir"];
-                GameDir = settings["game_dir"];
+                if (Properties.Settings.Default.UseBcml)
+                {
+                    string CemuSettings = File.ReadAllText(Properties.Settings.Default.bcmlLocation);
+                    Dictionary<string, string> settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(CemuSettings)!;
+                    CemuDir = settings["cemu_dir"];
+                    GameDir = settings["game_dir"];
+                }
+                else
+                {
+                    using (StreamReader reader = new StreamReader(Properties.Settings.Default.ukmmSettingLocation))
+                    {
+                        YamlStream yaml = new YamlStream();
+                        yaml.Load(reader);
+
+                        YamlMappingNode root = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+
+                        if (root.Children.TryGetValue(new YamlScalarNode("wiiu_config"), out var wiiuConfigNode) &&
+                            wiiuConfigNode is YamlMappingNode wiiuConfigMapping)
+                        {
+                            // Move to "deploy_config" > "executable"
+                            if (wiiuConfigMapping.Children.TryGetValue(new YamlScalarNode("deploy_config"), out var deployConfigNode) &&
+                                deployConfigNode is YamlMappingNode deployConfigMapping &&
+                                deployConfigMapping.Children.TryGetValue(new YamlScalarNode("executable"), out var executableNode))
+                            {
+                                CemuDir = Path.GetDirectoryName(executableNode.ToString())!;
+                            }
+
+                            // Move to "dump" > "source" > "content_dir"
+                            if (wiiuConfigMapping.Children.TryGetValue(new YamlScalarNode("dump"), out var dumpNode) &&
+                                dumpNode is YamlMappingNode dumpMapping &&
+                                dumpMapping.Children.TryGetValue(new YamlScalarNode("source"), out var sourceNode) &&
+                                sourceNode is YamlMappingNode sourceMapping &&
+                                sourceMapping.Children.TryGetValue(new YamlScalarNode("content_dir"), out var contentDirNode))
+                            {
+                                GameDir = contentDirNode.ToString();
+                            }
+                        }
+                    }
+                }
             }
             catch(Exception ex)
             {
@@ -306,6 +368,27 @@ namespace Breath_of_the_Wild_Multiplayer.MVVM.ViewModel
 
 
             SharedData.SetLoadingMessage("Loading player data...");
+
+            if (!Properties.Settings.Default.UseBcml && !Directory.Exists($"{CemuDir}/graphicPacks/BOTWMPPatches"))
+            {
+                string appFolder = AppDomain.CurrentDomain.BaseDirectory;
+                string patchesFolder = $"{appFolder}/ModFiles/patches";
+                string destinationFolder = $"{CemuDir}/graphicPacks/BOTWMPPatches";
+                
+
+                Directory.CreateDirectory(destinationFolder);
+                
+
+                string[] files = Directory.GetFiles(patchesFolder);
+
+                foreach (string filePath in files)
+                {
+                    string fileName = Path.GetFileName(filePath);
+                    string destPath = Path.Combine(destinationFolder, fileName);
+
+                    File.Copy(filePath, destPath);
+                }
+            }
 
             await Task.Run(() => GameFilesModifier.ChangeAttentionForJugadores(serverToJoin.playStyle != "Prop hunt"));
 
