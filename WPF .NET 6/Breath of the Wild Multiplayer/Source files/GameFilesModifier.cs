@@ -278,12 +278,10 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
             /* Modify Link models */
             // Create outputModel
             if(!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres") || new FileInfo($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres").Length <= 2 * 1024)
-            //if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres"))
             {
                 if (File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres"))
                 {
                     File.Delete($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres");
-                    Console.WriteLine("Fichier supprimé.");
                 }
 
                 byte[] LinkDecompressed = Yaz0.Decompress(titleBG.LoadedData["Model/Link.sbfres"].ToArray());
@@ -343,7 +341,6 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
             /************ Player textures ************/
             /* Modify Link's tex1 file */
             if(!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres") || new FileInfo($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres").Length <= 2 * 1024)
-            //if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres"))
             {
                 if (File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres"))
                 {
@@ -387,7 +384,6 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
 
             /* Modify Link's tex2 file */
             if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres") || new FileInfo($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres").Length <= 2 * 1024)
-            //if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres"))
             {
                 if (File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres"))
                 {
@@ -529,7 +525,6 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
             }
 
             if (!File.Exists($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres") || new FileInfo($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres").Length <= 2 * 1024)
-            //if (!File.Exists($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres"))
             {
                 if (File.Exists($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres"))
                 {
