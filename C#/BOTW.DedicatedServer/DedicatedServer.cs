@@ -1021,7 +1021,7 @@ namespace BOTW.DedicatedServer
         }
 
         [ServerCommand]
-        [Description("Ban someone, you do not ban the playername but the player's IP")]
+        [Description("Ban someone, you ban the playername and the player's IP")]
         [ExtraHelp("Usage: Ban <playername>")]
         public void Ban(string value)
         {
@@ -1052,7 +1052,7 @@ namespace BOTW.DedicatedServer
         }
 
         [ServerCommand]
-        [Description("UnBan someone, you do not ban the playername but the player's IP")]
+        [Description("UnBan someone, you unban the player name and the IP he used when he got banned")]
         [ExtraHelp("Usage: Ban <playername>")]
         public void UnBan(string value)
         {
