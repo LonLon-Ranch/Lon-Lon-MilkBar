@@ -277,8 +277,15 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
             /************ Player model ************/
             /* Modify Link models */
             // Create outputModel
-            if(!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres"))
+            if(!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres") || new FileInfo($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres").Length <= 2 * 1024)
+            //if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres"))
             {
+                if (File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres"))
+                {
+                    File.Delete($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.sbfres");
+                    Console.WriteLine("Fichier supprimé.");
+                }
+
                 byte[] LinkDecompressed = Yaz0.Decompress(titleBG.LoadedData["Model/Link.sbfres"].ToArray());
                 BfresFile outputModel = new BfresFile(new MemoryStream(LinkDecompressed));
 
@@ -335,8 +342,14 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
 
             /************ Player textures ************/
             /* Modify Link's tex1 file */
-            if(!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres"))
+            if(!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres") || new FileInfo($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres").Length <= 2 * 1024)
+            //if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres"))
             {
+                if (File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres"))
+                {
+                    File.Delete($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex1.sbfres");
+                }
+
                 byte[] LinkDecompressed = Yaz0.Decompress(File.ReadAllBytes($@"{GameDir}\Model\Link.Tex1.sbfres"));
                 BfresFile outputTexture = new BfresFile(new MemoryStream(LinkDecompressed));
 
@@ -373,8 +386,14 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
             }
 
             /* Modify Link's tex2 file */
-            if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres"))
+            if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres") || new FileInfo($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres").Length <= 2 * 1024)
+            //if (!File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres"))
             {
+                if (File.Exists($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres"))
+                {
+                    File.Delete($@"{ModLoaderPath}/Model/Jugador1ModelNameLongForASpecificReason.Tex2.sbfres");
+                }
+
                 byte[] LinkDecompressed = Yaz0.Decompress(titleBG.LoadedData["Model/Link.Tex2.sbfres"].ToArray());
                 BfresFile outputTexture = new BfresFile(new MemoryStream(LinkDecompressed));
 
@@ -509,8 +528,14 @@ namespace Breath_of_the_Wild_Multiplayer.Source_files
                 ModLoaderPath = $@"{ukmmModLocation}\wiiu\profiles\Default\merged\content";
             }
 
-            if (!File.Exists($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres"))
+            if (!File.Exists($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres") || new FileInfo($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres").Length <= 2 * 1024)
+            //if (!File.Exists($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres"))
             {
+                if (File.Exists($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres"))
+                {
+                    File.Delete($@"{ModLoaderPath}/Model/Player_Animation_NoFace.sbfres");
+                }
+
                 var res = new BfresFile(new MemoryStream(Yaz0.Decompress(File.ReadAllBytes($@"{GameDir}\Model\Player_Animation.sbfres"))));
                 res.Name = "Player_Animation_NoFace";
 
